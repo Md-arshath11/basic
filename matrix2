@@ -1,0 +1,23 @@
+import java.util.Scanner
+
+fun main(){
+    val scanner = Scanner(System.`in`)
+    println("enter the value for row")
+    val row = scanner.nextInt()
+
+    println("enter the value for column")
+    val col = scanner.nextInt()
+
+
+
+    println("Matrix")
+    for(i in 0 until row){
+        for(j in 0 until col){
+            print(" [$i $j] ")
+        }
+        println()
+
+    }
+
+}
+
