@@ -2,7 +2,7 @@
 // For 1 hour 2 players can book. Unless that amount of hour no one can book but can ask for other available slots.
 
 import java.util.Scanner
-import java.time.LocalTime
+
 
 class ticketBookingSystem(private val startTime: Int, private val endTime:Int) {
     val bookedSlot= mutableMapOf<Int ,Pair<String,String>>()
