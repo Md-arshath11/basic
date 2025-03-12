@@ -1,0 +1,61 @@
+//Yeah prepare a ticketing system which is having ticket for playing a batmitton arena.
+// For 1 hour 2 players can book. Unless that amount of hour no one can book but can ask for other available slots.
+
+import java.util.Scanner
+import java.time.LocalTime
+
+class ticketBookingSystem(private val startTime: Int, private val endTime:Int) {
+    val bookedSlot= mutableMapOf<Int ,Pair<String,String>>()
+
+    fun availableSlots(){
+        val slotsAvailable = (startTime..<endTime).filter { it !in bookedSlot }
+        if(slotsAvailable.isEmpty()){
+            println("No slots available")
+        }else{
+            println("Available slots available: ${slotsAvailable.joinToString(", ")}")
+        }
+    }
+
+    fun bookingSlot(hour: Int, player1: String, player2: String){
+        if(hour in bookedSlot){
+            println("$hour is already booked ")
+        }else if(hour !in startTime .. endTime){
+            println("$hour slot is not available")
+        }else{
+            bookedSlot[hour] = Pair(player1, player2)
+            println("$player1 $player2 your slot has been booked")
+        }
+    }
+}
+
+fun main() {
+    val scanner = Scanner(System.`in`)
+    val bookingSystem = ticketBookingSystem(9, 20)
+    while (true) {
+        println("1️:Show Available Slots")
+        println("2: Book a Slot")
+        println("3: Exit")
+        print("Enter your choice: ")
+
+
+        when (scanner.nextInt()) {
+            1 -> bookingSystem.availableSlots()
+            2 -> {
+                println("enter the slot")
+                val hour = scanner.nextInt()
+                if (hour in 9..19) {
+                    println("enter player1 name")
+                    val player1 = scanner.nextLine()
+                    println("enter player2 name")
+                    val player2 = scanner.nextLine()
+                    bookingSystem.bookingSlot(hour, player1, player2)
+                } else {
+                    println("invalid choice")
+                }
+            }
+
+            3 -> println("okay bye")
+            else -> println("invalid choice")
+        }
+    }
+}
