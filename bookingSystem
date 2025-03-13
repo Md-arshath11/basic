@@ -4,8 +4,29 @@
 import java.util.Scanner
 
 
+class User(var name:String)
+
 class ticketBookingSystem(private val startTime: Int, private val endTime:Int) {
-    val bookedSlot= mutableMapOf<Int ,Pair<String,String>>()
+    val bookedSlot= mutableMapOf<Int ,Pair<User,User>>()
+
+    var registeredUsers = mutableMapOf(
+        "A" to User("A"),
+        "B" to User("B"),
+        "C" to User("C"),
+        "D" to User("D"),
+        "E" to User("E"),
+        "F" to User("F"),
+        "G" to User("G"),
+    )
+
+    fun registerUser(name: String) {
+        if (name in registeredUsers) {
+            println("User $name already registered .Now you can book the slot")
+        }else{
+            registeredUsers[name]=User(name)
+            println("user has been registered")
+        }
+    }
 
     fun availableSlots(){
         val slotsAvailable = (startTime..<endTime).filter { it !in bookedSlot }
@@ -17,14 +38,24 @@ class ticketBookingSystem(private val startTime: Int, private val endTime:Int) {
     }
 
     fun bookingSlot(hour: Int, player1: String, player2: String){
+        val user1 =registeredUsers[player1]
+        val user2 =registeredUsers[player2]
+        if (user1 == null || user2 == null){
+            println("User $player1  $player2 not registered")
+            return
+        }
         if(hour in bookedSlot){
             println("$hour is already booked ")
         }else if(hour !in startTime .. endTime){
             println("$hour slot is not available")
         }else{
-            bookedSlot[hour] = Pair(player1, player2)
+            bookedSlot[hour] = Pair(user1,user2)
             println("$player1 $player2 your slot has been booked")
         }
+    }
+
+    fun showRegisteredUser(){
+        println("registered user ${registeredUsers.keys}")
     }
 }
 
@@ -32,29 +63,38 @@ fun main() {
     val scanner = Scanner(System.`in`)
     val bookingSystem = ticketBookingSystem(9, 20)
     while (true) {
-        println("1️:Show Available Slots")
-        println("2: Book a Slot")
-        println("3: Exit")
+        println("1:registered users")
+        println("2:register new users")
+        println("3:Show Available Slots")
+        println("4: Book a Slot")
+        println("5: Exit")
         print("Enter your choice: ")
 
 
         when (scanner.nextInt()) {
-            1 -> bookingSystem.availableSlots()
-            2 -> {
+            1 ->bookingSystem.showRegisteredUser()
+            2 ->{
+                println("enter name to register")
+                scanner.nextLine()
+                val name = scanner.nextLine()
+                bookingSystem.registerUser(name)
+            }
+            3 -> bookingSystem.availableSlots()
+            4 -> {
                 println("enter the slot")
                 val hour = scanner.nextInt()
                 if (hour in 9..19) {
                     println("enter player1 name")
-                    val player1 = scanner.nextLine()
+                    val player1 = scanner.next()
                     println("enter player2 name")
-                    val player2 = scanner.nextLine()
+                    val player2 = scanner.next()
                     bookingSystem.bookingSlot(hour, player1, player2)
                 } else {
                     println("invalid choice")
                 }
             }
 
-            3 -> println("okay bye")
+            5 -> println("okay bye")
             else -> println("invalid choice")
         }
     }
